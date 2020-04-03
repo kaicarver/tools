@@ -1,21 +1,24 @@
 #!/bin/sh
 # Keep track of how much I commit in the day
 
-FILE=commits.`date +%Y-%m-%d`.txt
+ROOT=~
+WDIR=~/tools
+DDIR=$WDIR/data
+FILE=$DDIR/commits.`date +%Y-%m-%d`.txt
 daylog() {
     PROJECT=${PWD##*/}
     YEAR=`date +%Y`
     git log --pretty --format="%ci %s" --since=midnight | \
 	sed "s/+0[12]00 //" | cut -c -76 | sed "s/^$YEAR-//" | \
-	sed "s/$/ >$PROJECT/"  >> ../$FILE
+	sed "s/$/ >$PROJECT/" >> $FILE
 }
 
 cd
 rm -f $FILE
 
-for repo in svelte-demo svelte-demo-debug lapeste sovelte blog yuansu-react git-sum jamstack-comments-engine vizhubbarchart todo
+for repo in svelte-demo svelte-demo-debug lapeste sovelte blog yuansu-react git-sum jamstack-comments-engine vizhubbarchart todo tools
 do
-    cd $repo; daylog; cd ..
+    cd $ROOT/$repo; daylog
 done
 
 cat $FILE | sort
