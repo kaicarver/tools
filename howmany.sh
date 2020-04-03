@@ -23,7 +23,7 @@ do
 done
 
 # print all the day's logs, in order
-cat $FILE | cut -c 6- | sort
+cat $FILE | cut -c 6- | sed 's/^ 0/  /' | sort
 
 # overall summary of the day's activity
 echo did `cat $FILE | sort | wc -l` commits \
