@@ -23,21 +23,20 @@ do
 done
 
 # print all the day's logs, in order
-cat $FILE | sort
-
-# print all the repos that had commits
-cat $FILE | cut -d\> -f 2- | sort -u
+cat $FILE | cut -c 6- | sort
 
 # overall summary of the day's activity
 echo did `cat $FILE | sort | wc -l` commits \
-     in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` different repos \
+     in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` ≠ repos \
      at `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
-     different hours \
+     ≠ hours \
      and `cat $FILE | cut -d' ' -f 2 | cut -c -4 | sed 's/:[0-2]/↑/' | sed 's/:[3-5]/↓/' | sort -u | wc -l` \
-     different half-hours of the day
+     ≠ half-hours of the day
 
-cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | tr -s '\n' ' '
-echo
-cat $FILE | cut -d' ' -f 2 | cut -c -4 | sed 's/:[0-2]/↑/' | sed 's/:[3-5]/↓/' | sort -u | tr -s '\n' ' '
-echo
+# repos
+echo " "`cat $FILE | cut -d\> -f 2- | sort -u | tr -s '\n' ' '`
+# hours
+echo " "`cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | tr -s '\n' ' '`
+# half hours
+echo " "`cat $FILE | cut -d' ' -f 2 | cut -c -4 | sed 's/:[0-2]/↑/' | sed 's/:[3-5]/↓/' | sort -u | tr -s '\n' ' '`
 echo It\'s `date +%H:%M`
