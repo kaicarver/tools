@@ -1,14 +1,15 @@
 #!/bin/bash
 # Keep track of how much I commit in the day
+# also redirects output to clip.exe for easy paste out of WSL
 
 # TODO: optional more detail about each commit: what files modified, how many lines...
-# TODO: also redirect output to clip.exe for easy paste out of WSL
+# TODO: publish to web! what's easiest way to do that?
 
 ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
 FILE=$DDIR/commits.`date +%Y-%m-%d`.txt
-TEMP=temp
+TEMP=$DDIR/temp
 
 # list the day's logs for 1 git project into a file
 daylog() {
