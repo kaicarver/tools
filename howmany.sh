@@ -2,6 +2,7 @@
 # Keep track of how much I commit in the day
 
 # TODO: optional more detail about each commit: what files modified, how many lines...
+# TODO: also redirect output to clip.exe for easy paste out of WSL
 
 ROOT=~
 WDIR=~/tools
@@ -41,4 +42,4 @@ echo " "`cat $FILE | cut -d\> -f 2- | sort -u | tr -s '\n' ' '`
 echo " "`cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | tr -s '\n' ' '`
 # half hours
 echo " "`cat $FILE | cut -d' ' -f 2 | cut -c -4 | sed 's/:[0-2]/↑/' | sed 's/:[3-5]/↓/' | sort -u | tr -s '\n' ' '`
-echo It\'s `date +%H:%M`
+echo It\'s `date +%H:%M` | tee /dev/fd/2 | clip.exe
