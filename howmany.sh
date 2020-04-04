@@ -1,6 +1,8 @@
 #!/bin/sh
 # Keep track of how much I commit in the day
 
+# TODO: optional more detail about each commit: what files modified, how many lines...
+
 ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
