@@ -12,6 +12,11 @@ FILE=$DDIR/commits.`date +%Y-%m-%d`.txt
 TEMP=$DDIR/temp
 
 # list the day's logs for 1 git project into a file
+# TODO: there should be an option to see the logs of a specific day,
+# using parameters of the form:
+#   git log --after="2013-11-12 00:00" --before="2013-11-13 00:00"
+# instead of 
+#   --since=midnight
 daylog() {
     PROJECT=${PWD##*/}
     YEAR=`date +%Y`
@@ -22,7 +27,7 @@ daylog() {
 
 # list the day's logs for a list of git projects into a file
 rm -f $FILE $TEMP
-for repo in svelte-demo svelte-demo-debug lapeste sovelte blog yuansu-react git-sum jamstack-comments-engine vizhubbarchart todo tools
+for repo in svelte-demo svelte-demo-debug lapeste sovelte blog yuansu-react git-sum jamstack-comments-engine vizhubbarchart todo tools uketabs
 do
     cd $ROOT/$repo; daylog
 done
