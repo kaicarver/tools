@@ -2,6 +2,11 @@
 # Keep track of how much I commit in the day
 # also redirects output to clip.exe for easy paste out of WSL
 
+# usage:
+#   $ ~/tools/howmany.sh [-c]
+# Displays what I did today.
+#   -c: copy output to clipboard, for pasting elsewhere in Windows
+
 # TODO: optional more detail about each commit: what files modified, how many lines...
 # TODO: publish to web! what's easiest way to do that?
 
@@ -51,7 +56,12 @@ echo " "`cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | tr -s '\n' ' '` |
 # half hours
 echo " "`cat $FILE | cut -d' ' -f 2 | cut -c -4 | sed 's/:[0-2]/↑/' | sed 's/:[3-5]/↓/' | sort -u | tr -s '\n' ' '` | tee -a $TEMP
 echo It\'s `date +%H:%M` | tee -a $TEMP
-cat $TEMP | clip.exe
+
+if [ "$1" = "-c" ]
+then
+    >&2 echo '(also copied output to clipboard)'
+    cat $TEMP | clip.exe
+fi
 
 # don't need this, but it's a clever bash trick to redirect stdout to multiple processes
 # cat $TEMP | tee >(clip.exe) >(cmd2) >(cmd3) ...
