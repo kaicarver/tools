@@ -42,7 +42,7 @@ cat $FILE | cut -c 6- | sed 's/^ 0/  /' | sort | tee -a $TEMP
 
 # overall summary of the day's activity
 echo did `cat $FILE | sort | wc -l` commits \
-     in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` ≠ repos \
+     in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
      at `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
      ≠ hours \
      and `cat $FILE | cut -d' ' -f 2 | cut -c -4 | sed 's/:[0-2]/↑/' | sed 's/:[3-5]/↓/' | sort -u | wc -l` \
