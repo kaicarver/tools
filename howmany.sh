@@ -7,9 +7,6 @@
 # Displays what I did today.
 #   -c: copy output to clipboard, for pasting elsewhere in Windows
 
-# TODO: optional more detail about each commit: what files modified, how many lines...
-# TODO: publish to web! what's easiest way to do that?
-
 ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
@@ -17,11 +14,6 @@ FILE=$DDIR/commits.`date +%Y-%m-%d`.txt
 TEMP=$DDIR/temp
 
 # list the day's logs for 1 git project into a file
-# TODO: there should be an option to see the logs of a specific day,
-# using parameters of the form:
-#   git log --after="2013-11-12 00:00" --before="2013-11-13 00:00"
-# instead of 
-#   --since=midnight
 daylog() {
     PROJECT=${PWD##*/}
     YEAR=`date +%Y`
@@ -62,6 +54,3 @@ then
     >&2 echo '(also copied output to clipboard)'
     cat $TEMP | clip.exe
 fi
-
-# don't need this, but it's a clever bash trick to redirect stdout to multiple processes
-# cat $TEMP | tee >(clip.exe) >(cmd2) >(cmd3) ...
