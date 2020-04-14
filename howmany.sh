@@ -17,8 +17,9 @@ TEMP=$DDIR/temp
 daylog() {
     PROJECT=${PWD##*/}
     YEAR=`date +%Y`
+    LEN=70 # 20 chars for datetime, 50 for max git comment length
     git log --pretty --format="%ci %s" --since=midnight | \
-      sed "s/+0[12]00 //" | cut -c -76 | sed "s/^$YEAR-//" | \
+      sed "s/+0[12]00 //" | cut -c -$LEN | sed "s/^$YEAR-//" | \
 	  sed "s/$/ >$PROJECT/" >> $FILE
 }
 
