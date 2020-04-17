@@ -38,7 +38,10 @@ echo " "`cat $FILE | cut -d\> -f 2- | sort -u | tr -s '\n' ' '` | tee -a $TEMP
 # hours, redundant with half-hours
 #echo " "`cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | tr -s '\n' ' '` | tee -a $TEMP
 # half hours
-echo `cat $FILE | cut -d' ' -f 2 | cut -c -4 | sed 's/:[0-2]/↑/' | sed 's/:[3-5]/↓/' | sort -u | tr -s '\n' ' '` | sed 's/\([0-2][0-9]\)↑ \1↓/\1↑↓/g' | tee -a $TEMP
+echo `cat $FILE | cut -d' ' -f 2 | cut -c -4 | \
+    sed 's/:[0-2]/↑/' | \
+    sed 's/:[3-5]/↓/' | \
+    sort -u | tr -s '\n' ' '` | sed 's/\([0-2][0-9]\)↑ \1↓/\1↑↓/g' | tee -a $TEMP
 
 # overall summary of the day's activity
 # need to integrate 15-min slots with ← and → using an extra digit of time...
@@ -47,9 +50,11 @@ echo `date +'%A %e %B, by %H:%M'` did `cat $FILE | sort | wc -l` commits \
      in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
      at `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
      ≠ hours, \
-     `cat $FILE | cut -d' ' -f 2 | cut -c -4 | \
-     sed 's/:[0-2]/↑/' | \
-     sed 's/:[3-5]/↓/' | \
+     `cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
+     sed 's/:08/←/' | \
+     sed 's/:[0-2][0-9]/↑x/' | \
+     sed 's/:[3-5][0-9]/↓/' | \
+     sed 's/:[3-5][0-9]/↓/' | \
      sort -u | wc -l` \
      ≠ half-hours \
      | tee -a $TEMP
