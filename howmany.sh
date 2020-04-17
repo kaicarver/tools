@@ -1,11 +1,15 @@
 #!/bin/bash
-# Keep track of how much I commit in the day
-# also redirects output to clip.exe for easy paste out of WSL
-
+# Keep track of how much I commit in the day.
+#
+# The idea is to give finer feedback on daily git commit activity
+# than Github tiles.
+#
 # usage:
 #   $ ~/tools/howmany.sh [-c]
 # Displays what I did today.
-#   -c: copy output to clipboard, for pasting elsewhere in Windows
+#   -c: copy output to clipboard for easy paste out of WSL elsewhere in Windows
+#
+# TODO: get rid of duplicate code, prob. by moving more to Perl
 
 ROOT=~
 WDIR=~/tools
