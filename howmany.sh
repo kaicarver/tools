@@ -41,6 +41,7 @@ echo " "`cat $FILE | cut -d\> -f 2- | sort -u | tr -s '\n' ' '` | tee -a $TEMP
 echo `cat $FILE | cut -d' ' -f 2 | cut -c -4 | sed 's/:[0-2]/↑/' | sed 's/:[3-5]/↓/' | sort -u | tr -s '\n' ' '` | sed 's/\([0-2][0-9]\)↑ \1↓/\1↑↓/g' | tee -a $TEMP
 
 # overall summary of the day's activity
+# need to integrate 15-min slots with ← and →
 echo `date +'%A %e %B, by %H:%M'` did `cat $FILE | sort | wc -l` commits \
      in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
      at `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
