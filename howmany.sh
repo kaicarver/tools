@@ -39,10 +39,12 @@ cat $FILE | cut -c 6- | sed 's/^ 0/  /' | sort | tee -a $TEMP
 
 # repos
 echo " "`cat $FILE | cut -d\> -f 2- | sort -u | tr -s '\n' ' '` | tee -a $TEMP
-# hours, redundant with half-hours
-#echo " "`cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | tr -s '\n' ' '` | tee -a $TEMP
+# hours (redundant with what follows)
+# echo " "`cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | tr -s '\n' ' '` | tee -a $TEMP
 # half hours
-#    sed 's/:0[0-9]|1[0-4]/←/' | \ [←↑→↓]
+# echo " "`cat $FILE | cut -d' ' -f 2 | cut -c -4 | sort -u | tr -s '\n' ' '` | \
+#    perl -Mutf8 -CS -pe 's/:[0-2]/↑/g; s/:[3-5]/↓/g' | tee -a $TEMP
+# quarter hours
 echo `cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
     sed 's/:0[0-9]/←/' | \
     sed 's/:1[0-4]/←/' | \
@@ -51,8 +53,7 @@ echo `cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
     sed 's/:4[0-4]/→/' | \
     sed 's/:[3-5][0-9]/↓/' | \
     sort -u | tr -s '\n' ' '` | \
-    perl -Mutf8 -CS -pe 's/([0-2][0-9])([←↑→↓]) \1([←↑→↓]) /\1\2\3 /g' | \
-    sed 's/\([0-2][0-9]\)\([←↑→↓][←↑→↓]\) \1\([←↑→↓][←↑→↓]\) /\1\2\3 /g' | \
+    perl -Mutf8 -CS -pe 's/([0-2][0-9])([←↑→↓]+) \1([←↑→↓]+) /\1\2\3 /g; s/([0-2][0-9])([←↑→↓]+) \1([←↑→↓]+) /\1\2\3 /g' | \
     tee -a $TEMP
 
 echo `date +'%A %e %B, by %H:%M'` did `cat $FILE | sort | wc -l` commits \
