@@ -11,8 +11,9 @@
 #
 # TODO: get rid of duplicate code, prob. by moving more to Perl
 
-PROJECTS="svelte-demo svelte-demo-debug lapeste sovelte blog yuansu-react git-sum \
-    jamstack-comments-engine vizhubbarchart todo tools uketabs clock"
+PROJECTS="svelte-demo svelte-demo-debug lapeste sovelte blog \
+    yuansu-react git-sum jamstack-comments-engine vizhubbarchart \
+    todo tools uketabs clock"
 ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
