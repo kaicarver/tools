@@ -11,6 +11,8 @@
 #
 # TODO: get rid of duplicate code, prob. by moving more to Perl
 
+PROJECTS="svelte-demo svelte-demo-debug lapeste sovelte blog yuansu-react git-sum \
+    jamstack-comments-engine vizhubbarchart todo tools uketabs clock"
 ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
@@ -29,7 +31,7 @@ daylog() {
 
 # list the day's logs for a list of git projects into a file
 rm -f $FILE $TEMP
-for repo in svelte-demo svelte-demo-debug lapeste sovelte blog yuansu-react git-sum jamstack-comments-engine vizhubbarchart todo tools uketabs
+for repo in $PROJECTS
 do
     cd $ROOT/$repo; daylog
 done
