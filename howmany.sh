@@ -13,7 +13,7 @@
 
 PROJECTS="svelte-demo svelte-demo-debug lapeste sovelte blog \
     yuansu-react git-sum jamstack-comments-engine vizhubbarchart \
-    todo tools uketabs clock"
+    todo tools uketabs clock bootcamp_python"
 ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
