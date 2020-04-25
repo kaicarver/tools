@@ -13,7 +13,7 @@
 
 PROJECTS="svelte-demo svelte-demo-debug lapeste sovelte blog \
     yuansu-react git-sum jamstack-comments-engine vizhubbarchart \
-    todo tools uketabs clock bootcamp_python"
+    todo tools uketabs clock bootcamp_python_kai geotools leaflet"
 ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
@@ -45,7 +45,7 @@ cat $FILE | cut -c 6- | sed 's/^ 0/  /' | sort | tee -a $TEMP
 #   cat data/commits.2020-04-17.txt | cut -d' ' -f 2 | cut -c -5
 
 # repos
-echo " "`cat $FILE | cut -d\> -f 2- | sort -u | tr -s '\n' ' '` | tee -a $TEMP
+echo ""`cat $FILE | cut -d\> -f 2- | sort -u | tr -s '\n' ' '` | tee -a $TEMP
 # hours (redundant with what follows)
 # echo " "`cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | tr -s '\n' ' '` | tee -a $TEMP
 # half hours
