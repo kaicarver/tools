@@ -45,7 +45,7 @@ cat $FILE | cut -c 6- | sed 's/^ 0/  /' | sort | tee -a $TEMP
 #   cat data/commits.2020-04-17.txt | cut -d' ' -f 2 | cut -c -5
 
 # repos
-echo ""`cat $FILE | cut -d\> -f 2- | sort -u | tr -s '\n' ' '` | tee -a $TEMP
+echo ""`cat $FILE | cut -d\> -f 2- | sort | uniq -c | sed 's/^[ ]*//g' | sed 's/ /:/g' | tr -s '\n' ' '` | tee -a $TEMP
 # hours (redundant with what follows)
 # echo " "`cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | tr -s '\n' ' '` | tee -a $TEMP
 # half hours
