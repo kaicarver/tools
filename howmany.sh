@@ -13,7 +13,7 @@
 
 PROJECTS="svelte-demo svelte-demo-debug lapeste sovelte blog \
     yuansu-react git-sum jamstack-comments-engine vizhubbarchart \
-    todo tools uketabs clock bootcamp_python_kai leaflet"
+    todo tools uketabs clock bootcamp_python_kai geotools leaflet"
 ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
@@ -34,7 +34,9 @@ daylog() {
 rm -f $FILE $TEMP
 for repo in $PROJECTS
 do
-    cd $ROOT/$repo; daylog
+    if [ -d "$ROOT/$repo" ]; then
+        cd $ROOT/$repo; daylog
+    fi
 done
 
 # print all the day's logs, in order
