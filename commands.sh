@@ -5,6 +5,6 @@ cd ~
 # status about all projects
 git-sum2/git-summary -lq
 # more status about list of projects
-for r in blog leaflet clock geotools bootcamp_python lapeste yuansu-react uketabs tools; do echo $r : `git -C $r status | grep ahead`; done
+for r in blog leaflet clock geotools bootcamp_python_kai lapeste yuansu-react uketabs tools; do echo $r : `git -C $r status | grep ahead`; done
 # push it
-for r in lapeste uketabs tools; do echo $r : `git -C $r push`; done
+for r in blog leaflet clock geotools bootcamp_python_kai lapeste yuansu-react uketabs tools; do echo $r : `git -C $r push`; done
