@@ -11,10 +11,9 @@
 #
 # TODO: get rid of duplicate code, prob. by moving more to Perl
 
-PROJECTS="svelte-demo svelte-demo-debug lapeste sovelte blog \
-    yuansu-react git-sum jamstack-comments-engine vizhubbarchart \
-    todo tools uketabs clock bootcamp_python_kai geotools leaflet \
-    sedfugit laravel"
+# list of projects, shared by other scripts
+source $(dirname "$0")/projects.sh
+
 ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
