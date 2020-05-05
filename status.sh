@@ -10,9 +10,8 @@ cd ~
 for repo in $PROJECTS
 do
     if [ -d "$repo" ]; then
-	echo $repo : `git -C $repo status | egrep 'ahead|Changes' | sed 's/Your branch is ahead of .origin.master./ahead/'`
+	echo $repo : `git -C $repo status | egrep 'ahead|Changes' \
+| sed 's/Your branch is ahead of .origin.master./ahead/' \
+| sed 's/:/./g'`
     fi
 done
-
-# push it
-#for r in blog leaflet clock geotools bootcamp_python_kai lapeste yuansu-react uketabs tools; do echo $r : `git -C $r push`; done
