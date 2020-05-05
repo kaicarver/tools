@@ -4,4 +4,4 @@
 PROJECTS="svelte-demo svelte-demo-debug lapeste sovelte blog \
     yuansu-react git-sum jamstack-comments-engine vizhubbarchart \
     todo tools uketabs clock bootcamp_python_kai geotools leaflet \
-    sedfugit laravel"
+    sedfugit laravel zi hbd"
