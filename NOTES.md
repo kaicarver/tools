@@ -4,6 +4,7 @@
   - [howmany.sh](#howmanysh)
     - [TODOS](#todos)
       - [option to specify day](#option-to-specify-day)
+      - [report on previous days](#report-on-previous-days)
       - [publish to the web](#publish-to-the-web)
       - [option of more detail about each commit](#option-of-more-detail-about-each-commit)
       - [every 15 minutes report](#every-15-minutes-report)
@@ -12,6 +13,7 @@
 ## howmany.sh
 
 ### TODOS
+
 #### option to specify day
 
 in the `daylog` function, there should be an option to see the logs of a specific day,
@@ -26,6 +28,12 @@ instead of
 ```bash
    git log --since=midnight
 ```
+
+#### report on previous days
+
+currently only gives info about today.
+
+What were past days, week, average, etc?
 
 #### publish to the web
 
