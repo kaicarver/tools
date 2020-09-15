@@ -20,6 +20,21 @@ DDIR=$WDIR/data
 FILE=$DDIR/commits.`date +%Y-%m-%d`.txt
 TEMP=$DDIR/temp
 
+if [ "$1" = "-c" ]
+then
+    clip=true
+    shift
+fi
+
+day=`date +'%Y-%m-%d'`
+
+if [ "$1" ]
+then
+    day="$1"
+fi
+
+echo day=$day
+
 # list the day's logs for 1 git project into a file
 daylog() {
     PROJECT=${PWD##*/}
@@ -90,7 +105,7 @@ echo `date +'%A %e %B, by %H:%M'` did `cat $FILE | sort | wc -l` commits \
      ≠ ¼ hours \
      | tee -a $TEMP
 
-if [ "$1" = "-c" ]
+if [ "$clip" = true ]
 then
     >&2 echo '(also copied output to clipboard)'
     cat $TEMP | clip.exe
