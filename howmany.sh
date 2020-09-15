@@ -25,6 +25,8 @@ daylog() {
     PROJECT=${PWD##*/}
     YEAR=`date +%Y`
     LEN=70 # 20 chars for datetime, 50 for max git comment length
+    # TODO: display commits for any given day, as below for 2020-09-14
+    #git log --pretty --format="%ai %s" --since=2020-09-14 --until=2020-09-14T23:59:59+02:00 | \
     git log --pretty --format="%ai %s" --since=midnight | \
       sed "s/+0[12]00 //" | cut -c -$LEN | sed "s/^$YEAR-//" | \
 	  sed "s/$/ >$PROJECT/" >> $FILE
