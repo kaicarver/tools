@@ -17,7 +17,6 @@ source $(dirname "$0")/projects.sh
 ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
-FILE=$DDIR/commits.`date +%Y-%m-%d`.txt
 TEMP=$DDIR/temp
 
 if [ "$1" = "-c" ]
@@ -27,22 +26,19 @@ then
 fi
 
 day=`date +'%Y-%m-%d'`
-
 if [ "$1" ]
 then
     day="$1"
 fi
 
-echo day=$day
+FILE=$DDIR/commits.`date -d $day +%Y-%m-%d`.txt
 
 # list the day's logs for 1 git project into a file
 daylog() {
     PROJECT=${PWD##*/}
-    YEAR=`date +%Y`
+    YEAR=`date -d $day +%Y`
     LEN=70 # 20 chars for datetime, 50 for max git comment length
-    # TODO: display commits for any given day, as below for 2020-09-14
-    #git log --pretty --format="%ai %s" --since=2020-09-14 --until=2020-09-14T23:59:59+02:00 | \
-    git log --pretty --format="%ai %s" --since=midnight | \
+    git log --pretty --format="%ai %s" --since=${day}T00:00:00+02:00 --until=${day}T23:59:59+02:00 | \
       sed "s/+0[12]00 //" | cut -c -$LEN | sed "s/^$YEAR-//" | \
 	  sed "s/$/ >$PROJECT/" >> $FILE
 }
@@ -85,7 +81,7 @@ echo `cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
     perl -Mutf8 -CS -pe 's/([0-2][0-9])([↑→↓←]+) \1([↑→↓←]+ ?)/\1\2\3/g; s/([0-2][0-9])([↑→↓←]+) \1([←↑→↓]+ ?)/\1\2\3/g' | \
     tee -a $TEMP
 
-echo `date +'%A %e %B, by %H:%M'` did `cat $FILE | sort | wc -l` commits \
+echo `date -d $day +'%A %e %B, by %H:%M'` did `cat $FILE | sort | wc -l` commits \
      in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
      at `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
      ≠ hours, \
