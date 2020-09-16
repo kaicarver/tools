@@ -25,7 +25,7 @@ then
     shift
 fi
 
-day=`date +'%Y-%m-%d'`
+day=`date +'%Y-%m-%dT%H:%M:%S'`
 if [ "$1" ]
 then
     day="$1"
