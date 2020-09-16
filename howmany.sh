@@ -28,6 +28,7 @@ fi
 day=`date +'%Y-%m-%dT%H:%M:%S'`
 if [ "$1" ]
 then
+    past=true
     day="$1"
 fi
 
@@ -81,7 +82,14 @@ echo `cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
     perl -Mutf8 -CS -pe 's/([0-2][0-9])([↑→↓←]+) \1([↑→↓←]+ ?)/\1\2\3/g; s/([0-2][0-9])([↑→↓←]+) \1([←↑→↓]+ ?)/\1\2\3/g' | \
     tee -a $TEMP
 
-echo `date -d $day +'%A %e %B, by %H:%M'` did `cat $FILE | sort | wc -l` commits \
+if [ "$past" = true ]
+then
+    hour=" "
+else
+    hour=", by %H:%M"
+fi
+
+echo `date -d $day +"%A %e %B$hour"` did `cat $FILE | sort | wc -l` commits \
      in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
      at `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
      ≠ hours, \
