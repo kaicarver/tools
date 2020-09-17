@@ -70,10 +70,10 @@ then
     echo "  "`cat $FILE | cut -d\> -f 2- | sort | uniq -c | sed 's/^[ ]*//g' | sed 's/ /:/g' | tr -s '\n' ' '` | tee -a $TEMP
 fi
 
-# hours, half hours, quarter hours
+# "slots" during which there is a commit, by hour, half hour, quarter hour
 if [ "$verbose" = "1" ]
 then
-    echo "  "`cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
+    slots=`cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
         sed 's/:0[0-9]/↑/' | \
         sed 's/:1[0-4]/↑/' | \
         sed 's/:[0-2][0-9]/→/' | \
@@ -83,9 +83,8 @@ then
         sed 'y/↑→↓←/←↑→↓/' | \
         sort -u | \
         sed 'y/←↑→↓/↑→↓←/' | \
-        tr -s '\n' ' '` | \
-        perl -Mutf8 -CS -pe 's/([0-2][0-9])([↑→↓←]+) \1([↑→↓←]+ ?)/\1\2\3/g; s/([0-2][0-9])([↑→↓←]+) \1([←↑→↓]+ ?)/\1\2\3/g' | \
-        tee -a $TEMP
+        tr -s '\n' ' ' | \
+        perl -Mutf8 -CS -pe 's/([0-2][0-9])([↑→↓←]+) \1([↑→↓←]+ ?)/\1\2\3/g; s/([0-2][0-9])([↑→↓←]+) \1([←↑→↓]+ ?)/\1\2\3/g'`
 fi
 
 if [ "$past" = true ]
@@ -114,6 +113,11 @@ echo `date -d $day +"%a %e %b$hour"` did `cat $FILE | sort | wc -l` commits \
      sort -u | wc -l` \
      ≠ ¼ hours \
      | tee -a $TEMP
+
+if [ "$verbose" = "1" ]
+then
+    echo "  "$slots | tee -a $TEMP
+fi
 
 if [ "$clip" = true ]
 then
