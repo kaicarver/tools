@@ -18,6 +18,7 @@ ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
 TEMP=$DDIR/temp
+verbose=1
 
 if [ "$1" = "-c" ]
 then
@@ -54,7 +55,7 @@ do
 done
 
 # print all the day's logs, in order
-if [ "$verbose" = true ]
+if [ "$verbose" = "3" ]
 then
     cat $FILE | cut -c 6- | sed 's/^ 0/  /' | sort | tee -a $TEMP
 fi
@@ -64,26 +65,28 @@ fi
 #   cat data/commits.2020-04-17.txt | cut -d' ' -f 2 | cut -c -5
 
 # repos
-echo ""`cat $FILE | cut -d\> -f 2- | sort | uniq -c | sed 's/^[ ]*//g' | sed 's/ /:/g' | tr -s '\n' ' '` | tee -a $TEMP
-# hours (redundant with what follows)
-# echo " "`cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | tr -s '\n' ' '` | tee -a $TEMP
-# half hours
-# echo " "`cat $FILE | cut -d' ' -f 2 | cut -c -4 | sort -u | tr -s '\n' ' '` | \
-#    perl -Mutf8 -CS -pe 's/:[0-2]/↑/g; s/:[3-5]/↓/g' | tee -a $TEMP
-# quarter hours
-echo `cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
-    sed 's/:0[0-9]/↑/' | \
-    sed 's/:1[0-4]/↑/' | \
-    sed 's/:[0-2][0-9]/→/' | \
-    sed 's/:3[0-9]/↓/' | \
-    sed 's/:4[0-4]/↓/' | \
-    sed 's/:[3-5][0-9]/←/' | \
-    sed 'y/↑→↓←/←↑→↓/' | \
-    sort -u | \
-    sed 'y/←↑→↓/↑→↓←/' | \
-    tr -s '\n' ' '` | \
-    perl -Mutf8 -CS -pe 's/([0-2][0-9])([↑→↓←]+) \1([↑→↓←]+ ?)/\1\2\3/g; s/([0-2][0-9])([↑→↓←]+) \1([←↑→↓]+ ?)/\1\2\3/g' | \
-    tee -a $TEMP
+if [ "$verbose" = "2" ]
+then
+    echo "  "`cat $FILE | cut -d\> -f 2- | sort | uniq -c | sed 's/^[ ]*//g' | sed 's/ /:/g' | tr -s '\n' ' '` | tee -a $TEMP
+fi
+
+# hours, half hours, quarter hours
+if [ "$verbose" = "1" ]
+then
+    echo "  "`cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
+        sed 's/:0[0-9]/↑/' | \
+        sed 's/:1[0-4]/↑/' | \
+        sed 's/:[0-2][0-9]/→/' | \
+        sed 's/:3[0-9]/↓/' | \
+        sed 's/:4[0-4]/↓/' | \
+        sed 's/:[3-5][0-9]/←/' | \
+        sed 'y/↑→↓←/←↑→↓/' | \
+        sort -u | \
+        sed 'y/←↑→↓/↑→↓←/' | \
+        tr -s '\n' ' '` | \
+        perl -Mutf8 -CS -pe 's/([0-2][0-9])([↑→↓←]+) \1([↑→↓←]+ ?)/\1\2\3/g; s/([0-2][0-9])([↑→↓←]+) \1([←↑→↓]+ ?)/\1\2\3/g' | \
+        tee -a $TEMP
+fi
 
 if [ "$past" = true ]
 then
@@ -92,7 +95,7 @@ else
     hour=", by %H:%M"
 fi
 
-echo `date -d $day +"%A %e %B$hour"` did `cat $FILE | sort | wc -l` commits \
+echo `date -d $day +"%a %e %b$hour"` did `cat $FILE | sort | wc -l` commits \
      in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
      at `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
      ≠ hours, \
