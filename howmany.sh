@@ -54,7 +54,10 @@ do
 done
 
 # print all the day's logs, in order
-cat $FILE | cut -c 6- | sed 's/^ 0/  /' | sort | tee -a $TEMP
+if [ "$verbose" = true ]
+then
+    cat $FILE | cut -c 6- | sed 's/^ 0/  /' | sort | tee -a $TEMP
+fi
 
 # overall summary of the day's activity
 # need to integrate 15-min slots with ← and → using an extra digit of time...
