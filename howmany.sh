@@ -18,7 +18,7 @@ ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
 TEMP=$DDIR/temp
-verbose=1
+verbose=2
 
 if [ "$1" = "-c" ]
 then
@@ -55,9 +55,18 @@ do
 done
 
 # print all the day's logs, in order
-if [ "$verbose" = "3" ]
-then
+if (( verbose <= 3 )); then
     cat $FILE | cut -c 6- | sed 's/^ 0/  /' | sort | tee -a $TEMP
+fi
+
+if (( verbose >= 3 )); then
+    echo max verbosity
+elif (( verbose >= 2 )); then
+    echo fairly verbose
+elif (( verbose >= 1 )); then
+    echo minimally verbose
+elif (( verbose < 1 )); then
+    echo laconic
 fi
 
 # overall summary of the day's activity
@@ -65,14 +74,12 @@ fi
 #   cat data/commits.2020-04-17.txt | cut -d' ' -f 2 | cut -c -5
 
 # repos
-if [ "$verbose" = "2" ]
-then
+if (( verbose <= 2 )); then
     echo "  "`cat $FILE | cut -d\> -f 2- | sort | uniq -c | sed 's/^[ ]*//g' | sed 's/ /:/g' | tr -s '\n' ' '` | tee -a $TEMP
 fi
 
 # "slots" during which there is a commit, by hour, half hour, quarter hour
-if [ "$verbose" = "1" ]
-then
+if (( verbose <= 3 )); then
     slots=`cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
         sed 's/:0[0-9]/↑/' | \
         sed 's/:1[0-4]/↑/' | \
@@ -114,8 +121,7 @@ echo `date -d $day +"%a %e %b$hour"` did `cat $FILE | sort | wc -l` commits \
      ≠ ¼ hours \
      | tee -a $TEMP
 
-if [ "$verbose" = "1" ]
-then
+if (( verbose <= 3 )); then
     echo "  "$slots | tee -a $TEMP
 fi
 
