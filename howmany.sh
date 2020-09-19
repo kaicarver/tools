@@ -18,7 +18,30 @@ ROOT=~
 WDIR=~/tools
 DDIR=$WDIR/data
 TEMP=$DDIR/temp
-verbose=1
+
+usage() {
+  echo "Usage: $0 [ -c ] [ -v level ] [YYYY-MM-DD]" 1>&2 
+}
+exit_abnormal() {
+  usage
+  exit 1
+}
+
+verbose=0
+while getopts "cv:" options; do
+    case "${options}" in
+        c) 
+            clip=true
+            ;;
+        v) 
+            verbose=${OPTARG}
+            ;;
+        *)
+            exit_abnormal
+            ;;
+    esac
+done
+shift $((OPTIND-1))
 
 # if (( verbose >= 3 )); then
 #     echo max verbosity
@@ -29,12 +52,6 @@ verbose=1
 # elif (( verbose < 1 )); then
 #     echo laconic
 # fi
-
-if [ "$1" = "-c" ]
-then
-    clip=true
-    shift
-fi
 
 day=`date +'%Y-%m-%dT%H:%M:%S'`
 if [ "$1" ]
