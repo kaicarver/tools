@@ -20,14 +20,25 @@ DDIR=$WDIR/data
 TEMP=$DDIR/temp
 
 usage() {
-  echo "Usage: $0 [ -c ] [ -v level ] [YYYY-MM-DD]" 1>&2 
+  echo "Usage: $0 [ -c ] [ -v level ] [YYYY-MM-DD] [YYYY-MM-DD] ..." 1>&2 
   echo "  $0 "`date +'%Y-%m-%d'`
-  echo "  $0 -v3 now  # max verbosity"
-  echo "  $0 -v 1 -c now  # also copy output to clipboard"
+  echo "  $0 -v3 now  # max verbosity (0-3)"
+  echo "  $0 -v 1 -c now  # also copy las day's output to clipboard"
 }
+
 exit_abnormal() {
   usage
   exit 1
+}
+
+# list the day's logs for 1 git project into a file
+daylog() {
+    PROJECT=${PWD##*/}
+    YEAR=`date -d $day +%Y`
+    LEN=70 # 20 chars for datetime, 50 for max git comment length
+    git log --pretty --format="%ai %s" --since=${day}T00:00:00+02:00 --until=${day}T23:59:59+02:00 | \
+    sed "s/+0[12]00 //" | cut -c -$LEN | sed "s/^$YEAR-//" | \
+    sed "s/$/ >$PROJECT/" >> $FILE
 }
 
 verbose=0
@@ -46,111 +57,94 @@ while getopts "cv:" options; do
 done
 shift $((OPTIND-1))
 
-# if (( verbose >= 3 )); then
-#     echo max verbosity
-# elif (( verbose >= 2 )); then
-#     echo fairly verbose
-# elif (( verbose >= 1 )); then
-#     echo minimally verbose
-# elif (( verbose < 1 )); then
-#     echo laconic
-# fi
-
-if [ "$1" ]
-then
-    if [ "$1" = "now" ]; then
-        day=`date +'%Y-%m-%dT%H:%M:%S'`
-    elif [[ "$1" =~ ^[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]$ ]]; then
-        past=true
-        day="$1"
+while [ "$1" ]; do
+    if [ "$1" ]
+    then
+        if [ "$1" = "now" ]; then
+            day=`date +'%Y-%m-%dT%H:%M:%S'`
+        elif [[ "$1" =~ ^[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]$ ]]; then
+            past=true
+            day="$1"
+        else
+            exit_abnormal
+        fi
     else
         exit_abnormal
     fi
-else
-    exit_abnormal
-fi
 
-FILE=$DDIR/commits.`date -d $day +%Y-%m-%d`.txt
+    FILE=$DDIR/commits.`date -d $day +%Y-%m-%d`.txt
 
-# list the day's logs for 1 git project into a file
-daylog() {
-    PROJECT=${PWD##*/}
-    YEAR=`date -d $day +%Y`
-    LEN=70 # 20 chars for datetime, 50 for max git comment length
-    git log --pretty --format="%ai %s" --since=${day}T00:00:00+02:00 --until=${day}T23:59:59+02:00 | \
-      sed "s/+0[12]00 //" | cut -c -$LEN | sed "s/^$YEAR-//" | \
-	  sed "s/$/ >$PROJECT/" >> $FILE
-}
+    # list the day's logs for a list of git projects into a file
+    rm -f $FILE $TEMP
+    for repo in $PROJECTS
+    do
+        if [ -d "$ROOT/$repo" ]; then
+            cd $ROOT/$repo; daylog
+        fi
+    done
 
-# list the day's logs for a list of git projects into a file
-rm -f $FILE $TEMP
-for repo in $PROJECTS
-do
-    if [ -d "$ROOT/$repo" ]; then
-        cd $ROOT/$repo; daylog
+    # print all the day's logs, in order
+    if (( verbose >= 3 )); then
+        cat $FILE | cut -c 6- | sed 's/^ 0/  /' | sort | tee -a $TEMP
     fi
+
+    # overall summary of the day's activity
+    # need to integrate 15-min slots with ← and → using an extra digit of time...
+    #   cat data/commits.2020-04-17.txt | cut -d' ' -f 2 | cut -c -5
+
+    # "slots" during which there is a commit, by hour, half hour, quarter hour
+    if (( verbose >= 1 )); then
+        slots=`cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
+            sed 's/:0[0-9]/↑/' | \
+            sed 's/:1[0-4]/↑/' | \
+            sed 's/:[0-2][0-9]/→/' | \
+            sed 's/:3[0-9]/↓/' | \
+            sed 's/:4[0-4]/↓/' | \
+            sed 's/:[3-5][0-9]/←/' | \
+            sed 'y/↑→↓←/←↑→↓/' | \
+            sort -u | \
+            sed 'y/←↑→↓/↑→↓←/' | \
+            tr -s '\n' ' ' | \
+            perl -Mutf8 -CS -pe 's/([0-2][0-9])([↑→↓←]+) \1([↑→↓←]+ ?)/\1\2\3/g; s/([0-2][0-9])([↑→↓←]+) \1([←↑→↓]+ ?)/\1\2\3/g'`
+    fi
+
+    if [ "$past" = true ]
+    then
+        hour=" "
+    else
+        hour=", by %H:%M"
+    fi
+
+    echo `date -d $day +"%a %e %b$hour"` did `cat $FILE | sort | wc -l` commits \
+        in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
+        at `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
+        ≠ hours, \
+        `cat $FILE | cut -d' ' -f 2 | cut -c -4 | \
+        sed 's/:[0-2]/↑/' | \
+        sed 's/:[3-5]/↓/' | \
+        sort -u | wc -l` \
+        ≠ ½ hours, \
+        `cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
+        sed 's/:0[0-9]/←/' | \
+        sed 's/:1[0-4]/←/' | \
+        sed 's/:[0-2][0-9]/↑/' | \
+        sed 's/:3[0-9]/→/' | \
+        sed 's/:4[0-4]/→/' | \
+        sed 's/:[3-5][0-9]/↓/' | \
+        sort -u | wc -l` \
+        ≠ ¼ hours \
+        | tee -a $TEMP
+
+    if (( verbose >= 1 )); then
+        echo "  "$slots | tee -a $TEMP
+    fi
+
+    # which repositories have commits and how many
+    if (( verbose >= 2 )); then
+        echo "  "`cat $FILE | cut -d\> -f 2- | sort | uniq -c | sed 's/^[ ]*//g' | sed 's/ /:/g' | tr -s '\n' ' '` | tee -a $TEMP
+    fi
+    shift
 done
-
-# print all the day's logs, in order
-if (( verbose >= 3 )); then
-    cat $FILE | cut -c 6- | sed 's/^ 0/  /' | sort | tee -a $TEMP
-fi
-
-# overall summary of the day's activity
-# need to integrate 15-min slots with ← and → using an extra digit of time...
-#   cat data/commits.2020-04-17.txt | cut -d' ' -f 2 | cut -c -5
-
-# "slots" during which there is a commit, by hour, half hour, quarter hour
-if (( verbose >= 1 )); then
-    slots=`cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
-        sed 's/:0[0-9]/↑/' | \
-        sed 's/:1[0-4]/↑/' | \
-        sed 's/:[0-2][0-9]/→/' | \
-        sed 's/:3[0-9]/↓/' | \
-        sed 's/:4[0-4]/↓/' | \
-        sed 's/:[3-5][0-9]/←/' | \
-        sed 'y/↑→↓←/←↑→↓/' | \
-        sort -u | \
-        sed 'y/←↑→↓/↑→↓←/' | \
-        tr -s '\n' ' ' | \
-        perl -Mutf8 -CS -pe 's/([0-2][0-9])([↑→↓←]+) \1([↑→↓←]+ ?)/\1\2\3/g; s/([0-2][0-9])([↑→↓←]+) \1([←↑→↓]+ ?)/\1\2\3/g'`
-fi
-
-if [ "$past" = true ]
-then
-    hour=" "
-else
-    hour=", by %H:%M"
-fi
-
-echo `date -d $day +"%a %e %b$hour"` did `cat $FILE | sort | wc -l` commits \
-     in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
-     at `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
-     ≠ hours, \
-     `cat $FILE | cut -d' ' -f 2 | cut -c -4 | \
-     sed 's/:[0-2]/↑/' | \
-     sed 's/:[3-5]/↓/' | \
-     sort -u | wc -l` \
-     ≠ ½ hours, \
-     `cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
-     sed 's/:0[0-9]/←/' | \
-     sed 's/:1[0-4]/←/' | \
-     sed 's/:[0-2][0-9]/↑/' | \
-     sed 's/:3[0-9]/→/' | \
-     sed 's/:4[0-4]/→/' | \
-     sed 's/:[3-5][0-9]/↓/' | \
-     sort -u | wc -l` \
-     ≠ ¼ hours \
-     | tee -a $TEMP
-
-if (( verbose >= 1 )); then
-    echo "  "$slots | tee -a $TEMP
-fi
-
-# which repositories have commits and how many
-if (( verbose >= 2 )); then
-    echo "  "`cat $FILE | cut -d\> -f 2- | sort | uniq -c | sed 's/^[ ]*//g' | sed 's/ /:/g' | tr -s '\n' ' '` | tee -a $TEMP
-fi
 
 if [ "$clip" = true ]
 then
