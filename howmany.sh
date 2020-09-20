@@ -53,11 +53,18 @@ shift $((OPTIND-1))
 #     echo laconic
 # fi
 
-day=`date +'%Y-%m-%dT%H:%M:%S'`
 if [ "$1" ]
 then
-    past=true
-    day="$1"
+    if [ "$1" = "now" ]; then
+        day=`date +'%Y-%m-%dT%H:%M:%S'`
+    elif [[ "$1" =~ '^[0-9][0-9][0-9][0-9]' ]]; then
+        past=true
+        day="$1"
+    else
+        exit_abnormal
+    fi
+else
+    exit_abnormal
 fi
 
 FILE=$DDIR/commits.`date -d $day +%Y-%m-%d`.txt
