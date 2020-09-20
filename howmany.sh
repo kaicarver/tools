@@ -20,7 +20,7 @@ DDIR=$WDIR/data
 TEMP=$DDIR/temp
 
 usage() {
-  echo "Usage: $0 [ -c ] [ -v level ] [YYYY-MM-DD] [YYYY-MM-DD] ..." 1>&2 
+  echo "Usage: $0 [-ch] [-v level] [YYYY-MM-DD] [YYYY-MM-DD] ..." 1>&2 
   echo "  $0 "`date +'%Y-%m-%d'`
   echo "  $0 -v3 now  # max verbosity (0-3)"
   echo "  $0 -v 1 -c now  # also copy the last day's output to clipboard"
@@ -42,10 +42,13 @@ daylog() {
 }
 
 verbose=0
-while getopts "cv:" options; do
+while getopts "chv:" options; do
     case "${options}" in
         c) 
             clip=true
+            ;;
+        h)
+            usage; exit
             ;;
         v) 
             verbose=${OPTARG}
@@ -58,7 +61,7 @@ done
 shift $((OPTIND-1))
 
 if [ "$1" = "" ]; then
-    exit_abnormal
+    set -- "now"  # this sets the command line to one arg: "now"
 fi
 
 while [ "$1" ]; do
