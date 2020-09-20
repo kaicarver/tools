@@ -21,6 +21,9 @@ TEMP=$DDIR/temp
 
 usage() {
   echo "Usage: $0 [ -c ] [ -v level ] [YYYY-MM-DD]" 1>&2 
+  echo "  $0 "`date +'%Y-%m-%d'`
+  echo "  $0 -v3 now  # max verbosity"
+  echo "  $0 -v 1 -c now  # also copy output to clipboard"
 }
 exit_abnormal() {
   usage
@@ -57,7 +60,7 @@ if [ "$1" ]
 then
     if [ "$1" = "now" ]; then
         day=`date +'%Y-%m-%dT%H:%M:%S'`
-    elif [[ "$1" =~ '^[0-9][0-9][0-9][0-9]' ]]; then
+    elif [[ "$1" =~ '[0-9][0-9][0-9][0-9]' ]]; then
         past=true
         day="$1"
     else
