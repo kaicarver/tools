@@ -23,7 +23,7 @@ usage() {
   echo "Usage: $0 [ -c ] [ -v level ] [YYYY-MM-DD] [YYYY-MM-DD] ..." 1>&2 
   echo "  $0 "`date +'%Y-%m-%d'`
   echo "  $0 -v3 now  # max verbosity (0-3)"
-  echo "  $0 -v 1 -c now  # also copy las day's output to clipboard"
+  echo "  $0 -v 1 -c now  # also copy the last day's output to clipboard"
 }
 
 exit_abnormal() {
@@ -57,18 +57,18 @@ while getopts "cv:" options; do
 done
 shift $((OPTIND-1))
 
+if [ "$1" = "" ]; then
+    exit_abnormal
+fi
+
 while [ "$1" ]; do
-    if [ "$1" ]
-    then
-        if [ "$1" = "now" ]; then
-            day=`date +'%Y-%m-%dT%H:%M:%S'`
-        elif [[ "$1" =~ ^[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]$ ]]; then
-            past=true
-            day="$1"
-        else
-            exit_abnormal
-        fi
+    if [ "$1" = "now" ]; then
+        day=`date +'%Y-%m-%dT%H:%M:%S'`
+    elif [[ "$1" =~ ^[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]$ ]]; then
+        past=true
+        day="$1"
     else
+        echo ERROR: "parameter '$1' unrecognized"
         exit_abnormal
     fi
 
