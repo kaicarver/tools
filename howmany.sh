@@ -21,8 +21,11 @@ TEMP=$DDIR/temp
 
 usage() {
   echo "Usage: $0 [-ch] [-v level] [YYYY-MM-DD] [YYYY-MM-DD] ..." 1>&2 
+  echo "  Report on commits for a given day."
+  echo "Examples:"
+  echo "  $0  # today's commits, briefest version"
   echo "  $0 "`date +'%Y-%m-%d'`
-  echo "  $0 -v3 now  # max verbosity (0-3)"
+  echo "  $0 -v3 now  # today's info, max verbosity (0-3)"
   echo "  $0 -v 1 -c now  # also copy the last day's output to clipboard"
 }
 
