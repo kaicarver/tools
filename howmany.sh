@@ -12,6 +12,7 @@
 # TODO: get rid of duplicate code, prob. by moving more to Perl
 # TODO: add the file (files, first file?) to the detailed log line,
 #       to make comment more understandable
+#       use something like git log --stat at a verbosity level of 4?
 
 # list of projects, shared by other scripts
 source $(dirname "$0")/projects.sh
