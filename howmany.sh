@@ -91,11 +91,6 @@ while [ "$1" ]; do
         fi
     done
 
-    # print all the day's logs, in order
-    if (( verbose >= 3 )); then
-        cat $FILE | cut -c 6- | sed 's/^ 0/  /' | sort | tee -a $TEMP
-    fi
-
     # overall summary of the day's activity
     # need to integrate 15-min slots with ← and → using an extra digit of time...
     #   cat data/commits.2020-04-17.txt | cut -d' ' -f 2 | cut -c -5
@@ -151,6 +146,12 @@ while [ "$1" ]; do
     if (( verbose >= 2 )); then
         echo "  "`cat $FILE | cut -d\> -f 2- | sort | uniq -c | sed 's/^[ ]*//g' | sed 's/ /:/g' | tr -s '\n' ' '` | tee -a $TEMP
     fi
+
+    # print all the day's logs, in order
+    if (( verbose >= 3 )); then
+        cat $FILE | cut -c 7- | sed 's/^0/ /' | sort | tee -a $TEMP
+    fi
+
     shift
 done
 
