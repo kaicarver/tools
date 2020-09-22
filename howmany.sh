@@ -121,15 +121,14 @@ while [ "$1" ]; do
         hour=", by %H:%M"
     fi
 
-    echo `date -d $day +"%a %e %b$hour"` did `cat $FILE | sort | wc -l` commits \
-        in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
-        at `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
+    echo `date -d $day +"%a %e %b$hour "` \
+        `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
         ≠ hours, \
         `cat $FILE | cut -d' ' -f 2 | cut -c -4 | \
         sed 's/:[0-2]/↑/' | \
         sed 's/:[3-5]/↓/' | \
         sort -u | wc -l` \
-        ≠ ½ hours, \
+        ≠ ½, \
         `cat $FILE | cut -d' ' -f 2 | cut -c -5 | \
         sed 's/:0[0-9]/←/' | \
         sed 's/:1[0-4]/←/' | \
@@ -138,7 +137,9 @@ while [ "$1" ]; do
         sed 's/:4[0-4]/→/' | \
         sed 's/:[3-5][0-9]/↓/' | \
         sort -u | wc -l` \
-        ≠ ¼ hours \
+        ≠ ¼, \
+        total `cat $FILE | sort | wc -l` \
+        in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
         | tee -a $TEMP
 
     if (( verbose >= 1 )); then
