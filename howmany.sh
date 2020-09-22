@@ -118,7 +118,7 @@ while [ "$1" ]; do
     then
         hour=" "
     else
-        hour=", by %H:%M"
+        hour=", by %H:%M,"
     fi
 
     echo `date -d $day +"%a %e %b$hour "` \
@@ -139,7 +139,7 @@ while [ "$1" ]; do
         sort -u | wc -l` \
         ≠ ¼, \
         total `cat $FILE | sort | wc -l` \
-        in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
+        commits in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
         | tee -a $TEMP
 
     if (( verbose >= 1 )); then
@@ -154,6 +154,13 @@ while [ "$1" ]; do
     # print all the day's logs, in order
     if (( verbose >= 3 )); then
         cat $FILE | cut -c 7- | sed 's/^0/ /' | sort | tee -a $TEMP
+    fi
+
+    # print info about each file
+    if (( verbose >= 4 )); then
+        echo verbose level 4 NYI
+        # could use something like this, but would have to do it in daylog...
+        # git log --stat | egrep '^( [^ ].* \| |Date|    [^ ])' | sed 's/Date:   Mon Sep 21 //' | sed 's/ 2020 .0200//' | head
     fi
 
     shift
