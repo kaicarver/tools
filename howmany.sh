@@ -45,8 +45,8 @@ daylog() {
     YEAR=`date -d $day +%Y`
     LEN=70 # 20 chars for datetime, 50 for max git comment length
     git log --pretty --format="%ai %s" --since=${day}T00:00:00+02:00 --until=${day}T23:59:59+02:00 | \
-    sed "s/+0[12]00 //" | cut -c -$LEN | sed "s/^$YEAR-//" | \
-    sed "s/$/ >$PROJECT/" >> $FILE
+      sed "s/+0[12]00 //" | cut -c -$LEN | sed "s/^$YEAR-//" | \
+      sed "s/$/ >$PROJECT/" >> $FILE
 }
 
 verbose=0
