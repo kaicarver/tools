@@ -24,7 +24,7 @@ TEMP=$DDIR/temp
 
 usage() {
     prog=`basename $0`
-    echo "Usage: $prog [-ch] [-v level] [YYYY-MM-DD] [YYYY-MM-DD] ...
+    echo "Usage: $prog [-ch] [-d numdays] [-v level] [YYYY-MM-DD] [YYYY-MM-DD] ...
   Report on commits for a given day.
 Examples:
   $prog              # today's commits, briefest version
@@ -50,13 +50,16 @@ daylog() {
 }
 
 verbose=0
-while getopts "chv:" options; do
+while getopts "chd:v:" options; do
     case "${options}" in
         c) 
             clip=true
             ;;
         h)
             usage; exit
+            ;;
+        d)
+            numdays=${OPTARG}
             ;;
         v) 
             verbose=${OPTARG}
@@ -70,6 +73,11 @@ shift $((OPTIND-1))
 
 if [ "$1" = "" ]; then
     set -- "now"  # this sets the command line to one arg: "now"
+fi
+
+if (( numdays > 0 )); then
+    echo "-d option NYI but here's a taste:"
+    set -- "2020-09-14" "2020-09-15" "2020-09-16" "2020-09-17" "2020-09-18" "2020-09-19" "2020-09-20" "2020-09-21" "2020-09-22" "2020-09-23" "2020-09-24"
 fi
 
 while [ "$1" ]; do
