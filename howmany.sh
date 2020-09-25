@@ -76,6 +76,7 @@ if [ "$1" = "" ]; then
 fi
 
 if (( numdays > 0 )); then
+    # TODO: just loop on: date +'%Y-%m-%d' -d"3 days ago"
     echo "-d option NYI but here's a taste:"
     set -- "2020-09-14" "2020-09-15" "2020-09-16" "2020-09-17" "2020-09-18" "2020-09-19" "2020-09-20" "2020-09-21" "2020-09-22" "2020-09-23" "2020-09-24"
 fi
