@@ -19,6 +19,7 @@
         </span>
       </li>
     </ul>
+    <p>Total Inventory: {{ totalProducts }}</p>
   </div>
   <script src="https://unpkg.com/vue"></script>
   <script>
@@ -26,6 +27,13 @@
       el: '#app',
       data: {
         products: []
+      },
+      computed: {
+        totalProducts () {
+          return this.products.reduce((sum, product) => {
+            return sum + product.quantity
+          }, 0)
+        }
       },
       created() {
         fetch('https://my-json-server.typicode.com/kaicarver/tools/db')
