@@ -8,12 +8,12 @@
 
 <body>
   <h1>Quickly add Vue to a web page</h1>
-  <p>This page demonstrates using Vue with no build tooling, in ? lines of code.</p>
+  <p>This page demonstrates using Vue with no build tooling, in < 50 lines of code.</p>
 
   <div id="app">
     <ul>
       <li v-for="product in products">
-        {{product}}
+        <a href="" target="">{{product.label}}</a>
       </li>
     </ul>
   </div>
@@ -23,9 +23,9 @@
       el: '#app',
       data: {
         products: [
-          'Boots',
-          'Jacket',
-          'Hiking Socks'
+          { label: 'Boots' },
+          { label: 'Shoes' },
+          { label: 'Socks' },
         ]
       }
     })
