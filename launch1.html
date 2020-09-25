@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Kai's fast.ai launch page</title>
+</head>
+
+<body>
+  <div id="app">
+    <ul>
+      <li v-for="link in links">
+        {{link.URL}} {{link.label}} 
+      </li>
+    </ul>
+  </div>
+  <script src="https://unpkg.com/vue"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        links: []
+      },
+      created() {
+        this.links = parse(`
+http://one.com one
+http://two.com two etc.
+http://three.com hsfklj sfl sdjlksdflsdfk jsdfl
+`);
+      }
+    })
+    function parse(x) {
+      return x.trim().split("\n").map((x) => {
+        [ URL, label ] = /([^\s]+)\s(.+)/.exec(x).slice(1);
+        return { "URL": URL, "label": label };
+      });
+    }
+  </script>
+</body>
+
+</html>
