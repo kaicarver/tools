@@ -13,7 +13,10 @@
   <div id="app">
     <ul>
       <li v-for="product in products">
-        <a href="" target="">{{product.label}}</a>
+        {{product.quantity}} {{product.name}}
+        <span v-if="product.quantity == 0">
+          - OUT OF STOCK
+        </span>
       </li>
     </ul>
   </div>
@@ -22,11 +25,14 @@
     const app = new Vue({
       el: '#app',
       data: {
-        products: [
-          { label: 'Boots' },
-          { label: 'Shoes' },
-          { label: 'Socks' },
-        ]
+        products: []
+      },
+      created() {
+        fetch('https://my-json-server.typicode.com/kaicarver/tools/db')
+          .then(response => response.json())
+          .then(json => {
+            this.products = json.products
+          })
       }
     })
   </script>
