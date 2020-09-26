@@ -148,7 +148,7 @@ while [ "$1" ]; do
         sort -u | wc -l` \
         ≠ ¼, \
         total `cat $FILE | sort | wc -l` \
-        commits in `cat $FILE | cut -d\> -f 2- | sort -u | wc -l` repos \
+        commits \
         | tee -a $TEMP
 
     if (( verbose >= 1 )); then
@@ -157,7 +157,7 @@ while [ "$1" ]; do
 
     # which repositories have commits and how many
     if (( verbose >= 2 )); then
-        echo "  "`cat $FILE | cut -d\> -f 2- | sort | uniq -c | sed 's/^[ ]*//g' | sed 's/ /:/g' | tr -s '\n' ' '` | tee -a $TEMP
+        echo "  in "`cat $FILE | cut -d\> -f 2- | sort -u | wc -l`" repos commits/repo: "`cat $FILE | cut -d\> -f 2- | sort | uniq -c | sed 's/^[ ]*//g' | sed 's/ /\//g' | tr -s '\n' ' '` | tee -a $TEMP
     fi
 
     # print all the day's logs, in order
