@@ -1,33 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
 <html>
+
 <head>
-<title>Kai's Own Launch</title>
+  <meta charset="UTF-8" />
+  <title>Kai's fast.ai launch page</title>
 </head>
+
 <body>
-<p><a href="https://750words.com/" target="750words">750words.com</a></p>
-<p><a href="https://750words.com/auth" target="750words">750words.com login</a></p>
-<p><a href="https://powerful-anchorage-09770.herokuapp.com/test.html" target="textapi">Tiny text-posting</a></p>
-<p><a href="https://www.strava.com/dashboard?feed_type=my_activity" target="strava">Strava activity</a></p>
-<p><a href="https://connect.garmin.com/modern/dashboard/23645587" target="garmin">Garmin dashboard</a></p>
-<p><a href="https://www.ginifab.com.tw/promo/xinjing.html" target="heartsutra">Heart Sutra</a></p>
-<p><a href="launch.html" target="fastailaunch">fast.ai launch page</a></p>
-
-
-<p>This is a good example of a page that would be more nicely made dynamic. The information is just a list of items containing:</p>
-<pre>
-  label,
-    URL,
-    target
-  Jeremy Howard lectures
-    https://course.fast.ai/videos/?lesson=2
-    fastaivideo
-  "fastbook" channel of Slack group where discussion occurs (preferred to Zoom chat)
-    https://machinelearningtokyo.slack.com/archives/C0126RJRZD4
-    fastbookmlt
-  ...
-</pre>
-<p>The rest is just formatting, which is tedious to do. I could use Markdown to make typing easier (though I hate typing links in Markdown, I know, I'm petty). But I want something a bit fancier as the final result, which could advantageously be rendered dynamically. And server-side rendered too. So using React or Svelte becomes necessary... It feels like a heavy solution, but server-side plus possible hydration really does everything I want, except to make my developer UX to be optimal, this needs to feel super easy... And I don't have time to look into doing this right now.</p>
-<p>One problem is that, though it doesn't reopen a tab, it does reload what's in it. It should check if the tab is open, and if it is, just put that tab in the foreground. Not sure I can do that with standard web... It's looking more like something more for an extension... But I didn't want to do an extension, this has to run everywhere, on all devices and all browsers!...</p>
+  <div id="app">
+    <ul>
+      <li v-for="link in links">
+        <a :href="link.URL" :target="link.URL">{{link.label}}</a>
+      </li>
+    </ul>
+  </div>
+  <script src="https://unpkg.com/vue"></script>
+  <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>-->
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        links: []
+      },
+      created() {
+        this.links = parse(`
+https://750words.com/" target="750words">750words.com</a></p>
+https://750words.com/auth" target="750words">750words.com login</a></p>
+https://powerful-anchorage-09770.herokuapp.com/test.html" target="textapi">Tiny text-posting</a></p>
+https://www.strava.com/dashboard?feed_type=my_activity" target="strava">Strava activity</a></p>
+https://connect.garmin.com/modern/dashboard/23645587" target="garmin">Garmin dashboard</a></p>
+https://www.ginifab.com.tw/promo/xinjing.html" target="heartsutra">Heart Sutra</a></p>
+launch.html" target="fastailaunch">fast.ai launch page</a></p>
+`);
+      }
+    })
+    function parse(x) {
+      return x.trim().split("\n").map((x) => {
+        [ URL, label ] = /([^\s]+)\s(.+)/.exec(x).slice(1);
+        return { "URL": URL, "label": label };
+      });
+    }
+  </script>
 </body>
+
 </html>
