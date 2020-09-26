@@ -10,7 +10,7 @@
   <div id="app">
     <ul>
       <li v-for="link in links">
-        {{link.URL}} {{link.label}} 
+        <a :href="link.URL" :target="link.URL">{{link.label}}</a>
       </li>
     </ul>
   </div>
@@ -23,9 +23,14 @@
       },
       created() {
         this.links = parse(`
-http://one.com one
-http://two.com two etc.
-http://three.com hsfklj sfl sdjlksdflsdfk jsdfl
+https://course.fast.ai/videos/?lesson=2 Jeremy Howard lectures
+https://youtu.be/BvHmRx14HQ8 Jeremy Howard lecture 2 on Youtube
+https://console.paperspace.com/notebooks Gradient Paperspace notebooks
+https://kaicarver.github.io/ Kai's fast.ai blog
+https://app.slack.com/client/T6R17MC0J/C0126RJRZD4 Fastbook slack group
+https://www.meetup.com/Machine-Learning-Tokyo/ this is the group where events are scheduled
+https://app.slack.com/client/T6R17MC0J/C0126RJRZD4 this is the slack group where discussion occurs
+launch2.html personal launch page 
 `);
       }
     })
