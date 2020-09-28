@@ -13,7 +13,7 @@ do
         # only push when branch is ahead of origin/master
         todo=`git -C $repo status | egrep 'ahead'`
         if [ "$todo" != "" ] ; then
-            echo -n $repo ": "
+            echo $repo ": "
             git -C $repo push
         fi
     fi
