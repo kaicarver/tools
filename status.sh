@@ -20,7 +20,7 @@ do
                 | sed 's/Your branch is ahead of .origin.master./ahead/' \
                 | sed 's/:/./g' | sed 's/\n/ /g'`
         if [ "$todo" != "" ] ; then
-            echo $repo : $todo
+            echo $repo : $todo | tr '[:upper:]' '[:lower:]'
         fi
     fi
 done
