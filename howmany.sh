@@ -162,7 +162,7 @@ while [ "$1" ]; do
 
     # print all the day's logs, in order
     if (( verbose >= 3 )); then
-        cat $FILE | cut -c 7- | sed 's/^0/ /' | sort | tee -a $TEMP
+        cat $FILE | cut -c 7- | sed 's/^0/ /' | sed 's/:[0-5][0-9] / /' | sort | tee -a $TEMP
     fi
 
     # print info about each file
