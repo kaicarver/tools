@@ -1,5 +1,5 @@
 #!/bin/bash
-# Some commands I use from my history and don't want to lose
+# push everything that needs to be pushed in all my projects
 
 # list of projects, shared by other scripts
 source $(dirname "$0")/projects.sh
@@ -10,8 +10,12 @@ cd ~
 for repo in $PROJECTS
 do
     if [ -d "$repo" ]; then
-	echo -n $repo ": "
-	git -C $repo push
+        # only push when branch is ahead of origin/master
+        todo=`git -C $repo status | egrep 'ahead'`
+        if [ "$todo" != "" ] ; then
+            echo -n $repo ": "
+            git -C $repo push
+        fi
     fi
 done
 
