@@ -10,8 +10,12 @@ cd ~
 for repo in $PROJECTS
 do
     if [ -d "$repo" ]; then
-	echo $repo : `git -C $repo status | egrep 'ahead|Changes' \
-| sed 's/Your branch is ahead of .origin.master./ahead/' \
-| sed 's/:/./g'`
+        foo=`git -C $repo status | egrep 'ahead|Changes'` ;
+        if [ "$foo" != "" ] ; then
+            echo "<$foo>"
+            echo $repo : `git -C $repo status | egrep 'ahead|Changes' \
+                | sed 's/Your branch is ahead of .origin.master./ahead/' \
+                | sed 's/:/./g'`
+        fi
     fi
 done
