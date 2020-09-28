@@ -7,15 +7,17 @@ source $(dirname "$0")/projects.sh
 cd ~
 
 # more status about list of projects
+echo in the following projects:
+echo   $PROJECTS
+echo
 for repo in $PROJECTS
 do
     if [ -d "$repo" ]; then
-        foo=`git -C $repo status | egrep 'ahead|Changes'` ;
-        if [ "$foo" != "" ] ; then
-            echo "<$foo>"
-            echo $repo : `git -C $repo status | egrep 'ahead|Changes' \
+        todo=`git -C $repo status | egrep 'ahead|Changes'\
                 | sed 's/Your branch is ahead of .origin.master./ahead/' \
-                | sed 's/:/./g'`
+                | sed 's/:/./g' | sed 's/\n/ /g'` ;
+        if [ "$todo" != "" ] ; then
+            echo $repo : $todo
         fi
     fi
 done
