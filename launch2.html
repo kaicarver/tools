@@ -2,9 +2,25 @@
 <html>
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8" />
   <title>Kai's personal launch page</title>
 </head>
+<style>
+  /* If the screen size is X wide or more */
+  @media only screen and (min-width: 1025px) {
+    body {
+      font-size: 16px;
+    }
+  }
+
+  /* If the screen size is X wide or less */
+  @media only screen and (max-width: 1024px) {
+    body {
+      font-size: 5vw;
+    }
+  }
+</style>
 
 <body>
   <div id="app">
@@ -36,7 +52,7 @@ launch1.html fast.ai launch page
     })
     function parse(x) {
       return x.trim().split("\n").map((x) => {
-        [ URL, label ] = /([^\s]+)\s(.+)/.exec(x).slice(1);
+        [URL, label] = /([^\s]+)\s(.+)/.exec(x).slice(1);
         return { "URL": URL, "label": label };
       });
     }
