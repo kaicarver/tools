@@ -1,0 +1,13 @@
+/* If the screen size is X wide or more */
+@media only screen and (min-width: 1025px) {
+  body {
+    font-size: 24px;
+  }
+}
+
+/* If the screen size is X wide or less */
+@media only screen and (max-width: 1024px) {
+  body {
+    font-size: 5vw;
+  }
+}
