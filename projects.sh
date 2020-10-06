@@ -6,6 +6,6 @@ PROJECTS="svelte-demo svelte-demo-debug lapeste sovelte blog \
     todo tools uketabs clock bootcamp_python_kai geotools leaflet \
     sedfugit laravel zi hbd nextjs-blog csf amplify/postagram \
     textapi ytplayer worldword kaicarver.github.io fastai fastaixp \
-    kaicarver scrape"
+    kaicarver scrape learn-tachyons"
 
 PROJECTS=$(echo $PROJECTS | tr " " "\n" | sort)
