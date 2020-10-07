@@ -16,7 +16,7 @@ fi
 for repo in $PROJECTS
 do
     if [ -d "$repo" ]; then
-        todo=`git -C $repo status | egrep 'ahead|Changes'\
+        todo=`git -C $repo status | egrep 'ahead|Changes|untracked|Untracked'\
                 | sed 's/Your branch is ahead of .origin.master./ahead/' \
                 | sed 's/:/./g' | sed 's/\n/ /g'`
         if [ "$todo" != "" ] ; then
