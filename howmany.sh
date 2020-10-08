@@ -127,10 +127,14 @@ while [ "$1" ]; do
     then
         hour=" "
     else
-        hour=", by %H:%M,"
+        hour=", by %H:%M"
     fi
 
-    echo `date -d $day +"%a %e %b$hour "` \
+    if (( verbose >= 1 )); then
+        echo `date -d $day +"%a %e %b$hour"` | tee -a $TEMP
+    fi
+    echo total `cat $FILE | sort | wc -l` \
+        "commits," \
         `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
         ≠ hours, \
         `cat $FILE | cut -d' ' -f 2 | cut -c -4 | \
@@ -146,9 +150,7 @@ while [ "$1" ]; do
         sed 's/:4[0-4]/→/' | \
         sed 's/:[3-5][0-9]/↓/' | \
         sort -u | wc -l` \
-        ≠ ¼, \
-        total `cat $FILE | sort | wc -l` \
-        commits \
+        ≠ ¼ \
         | tee -a $TEMP
 
     if (( verbose >= 1 )); then
