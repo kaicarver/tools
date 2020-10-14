@@ -133,10 +133,15 @@ while [ "$1" ]; do
     if (( verbose >= 1 )); then
         echo `date -d $day +"%a %e %b$hour"` | tee -a $TEMP
     fi
+
+    hourslots=`cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l`
+    # the goal is to make commits at 8 different hours in the day
+    if (( hourslots >= 8 )); then
+        done=DONE
+    fi
     echo total `cat $FILE | sort | wc -l` \
         "commits," \
-        `cat $FILE | cut -d' ' -f 2 | cut -d: -f 1 | sort -u | wc -l` \
-        ≠ hours, \
+        $hourslots ≠ hours, \
         `cat $FILE | cut -d' ' -f 2 | cut -c -4 | \
         sed 's/:[0-2]/↑/' | \
         sed 's/:[3-5]/↓/' | \
@@ -150,7 +155,7 @@ while [ "$1" ]; do
         sed 's/:4[0-4]/→/' | \
         sed 's/:[3-5][0-9]/↓/' | \
         sort -u | wc -l` \
-        ≠ ¼ \
+        ≠ ¼ $done \
         | tee -a $TEMP
 
     if (( verbose >= 1 )); then
