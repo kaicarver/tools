@@ -139,8 +139,9 @@ while [ "$1" ]; do
     if (( hourslots >= 8 )); then
         done=DONE
     fi
-    echo total `cat $FILE | sort | wc -l` \
-        "commits," \
+    echo -n total `cat $FILE | sort | wc -l` "commits" | tee -a $TEMP
+    if (( hourslots > 0 )); then
+    echo "," \
         $hourslots ≠ hours, \
         `cat $FILE | cut -d' ' -f 2 | cut -c -4 | \
         sed 's/:[0-2]/↑/' | \
@@ -157,6 +158,9 @@ while [ "$1" ]; do
         sort -u | wc -l` \
         ≠ ¼ $done \
         | tee -a $TEMP
+    else
+        echo "" | tee -a $TEMP
+    fi
 
     if (( verbose >= 1 )); then
         echo "  "$slots | tee -a $TEMP
