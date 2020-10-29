@@ -44,7 +44,9 @@ daylog() {
     PROJECT=${PWD##*/}
     YEAR=`date -d $day +%Y`
     LEN=70 # 20 chars for datetime, 50 for max git comment length
-    git log --pretty --format="%ai %s" --since=${day}T00:00:00+02:00 --until=${day}T23:59:59+02:00 | \
+    #OFFSET=+02:00 # CEST Central European Summer Time
+    OFFSET=+01:00 # CET Central European Time (winter time)
+    git log --pretty --format="%ai %s" --since=${day}T00:00:00$OFFSET --until=${day}T23:59:59$OFFSET | \
       sed "s/+0[12]00 //" | cut -c -$LEN | sed "s/^$YEAR-//" | \
       sed "s/$/ >$PROJECT/" >> $FILE
 }
