@@ -15,6 +15,23 @@
         <a :href="link.URL" :target="link.URL">{{link.label}}</a>
       </li>
     </ul>
+    <p>Pour démarrer l'appli en local :
+      <pre>
+        1. démarre Wampserver64 pour Apache/localhost, MySQL, PhpMyAdmin :
+          ⊞Win wa Enter
+        2. connecter à la base :
+          http://localhost/phpmyadmin/index.php?route=/&route=%2F&db=jdb1 avec login root password vide
+        3. lancer le framework Symfony :
+          ouvrir un terminal Windows PowerShell
+          on se trouve dans C:\Users\kaica\
+          aller dans le répertoire où se trouvent les sources de l'appli Jourdebord :
+            cd lgc\Jdb1
+          lancer le serveur du framework Symfony
+            symfony serve
+        4. ouvrir la page d'accueil de Jourdebord dans un browser :
+          http://127.0.0.1:8000/
+      </pre>
+    </p>
   </div>
   <script src="https://unpkg.com/vue@2"></script>
   <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>-->
